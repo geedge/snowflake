@@ -37,6 +37,8 @@
 
 ## 多进程下用zookeeper获取workerID
 
+    Zookeeper分布式锁应用了临时顺序节点
+    
 ### 步骤
 * 在zookeeper指定节点（locks）下创建临时顺序节点node_n
 * 获取locks下所有子节点children
