@@ -105,11 +105,12 @@ public class SnowflakeId {
         if (tmpWorkerId > maxWorkerId || tmpWorkerId < 0) {
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
         }
-        if (FlowWriteConfig.DATA_CENTER_ID_NUM > maxDataCenterId || FlowWriteConfig.DATA_CENTER_ID_NUM < 0) {
+        int dataCenterId = FlowWriteConfig.DATA_CENTER_ID_NUM;
+        if (dataCenterId > maxDataCenterId || dataCenterId < 0) {
             throw new IllegalArgumentException(String.format("datacenter Id can't be greater than %d or less than 0", maxDataCenterId));
         }
         this.workerId = tmpWorkerId;
-        this.dataCenterId = FlowWriteConfig.DATA_CENTER_ID_NUM;
+        this.dataCenterId = dataCenterId;
     }
 
     // ==============================Methods==========================================

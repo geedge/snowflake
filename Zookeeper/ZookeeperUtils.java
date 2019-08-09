@@ -41,7 +41,7 @@ public class ZookeeperUtils implements Watcher {
         createNode("/Snowflake/" + FlowWriteConfig.KAFKA_TOPIC, "0".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE);
         int workerId;
         try {
-            connectZookeeper(FlowWriteConfig.ZOOKEEPER_SERVERS);
+            connectZookeeper();
             Stat stat = zookeeper.exists(path, true);
             workerId = Integer.parseInt(getNodeDate(path));
             if (workerId > 55) {
@@ -68,11 +68,10 @@ public class ZookeeperUtils implements Watcher {
     /**
      * 连接zookeeper
      *
-     * @param host 地址
      */
-    private void connectZookeeper(String host) {
+    private void connectZookeeper() {
         try {
-            zookeeper = new ZooKeeper(host, SESSION_TIME_OUT, this);
+            zookeeper = new ZooKeeper(FlowWriteConfig.ZOOKEEPER_SERVERS, SESSION_TIME_OUT, this);
             countDownLatch.await();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -118,7 +117,7 @@ public class ZookeeperUtils implements Watcher {
      */
     private void createNode(String path, byte[] date, List<ACL> acls) {
         try {
-            connectZookeeper(FlowWriteConfig.ZOOKEEPER_SERVERS);
+            connectZookeeper();
             Stat exists = zookeeper.exists(path, true);
             if (exists == null) {
                 zookeeper.create(path, date, acls, CreateMode.PERSISTENT);
