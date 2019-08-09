@@ -45,4 +45,30 @@
 * 对子节点按节点自增序号从小到大排序
 * 判断本节点是不是第一个子节点，若是，则获取锁；若不是，则监听比该节点小的那个节点的删除事件
 * 若监听事件生效，则回到第二步重新进行判断，直到获取到锁
+
+
+# 使用方式
+```
+    使用如下返回一个ID
     
+    SnowflakeId.generateId()
+``` 
+    
+## 需要修改的地方
+
+* 修改 `SnowflakeId 102行`<br>
+  DistributedLock lock = new DistributedLock(FlowWriteConfig.ZOOKEEPER_SERVERS, "disLocks1")<br>
+  第一个参数为 zookeeper地址 第二个参数为锁的前缀
+
+* 修改 `SnowflakeId 104行`<br>
+  int tmpWorkerId = zookeeperUtils.modifyNode("/Snowflake/" + FlowWriteConfig.KAFKA_TOPIC);<br>
+  将FlowWriteConfig.KAFKA_TOPIC 替换为你想要的名称 /为划分节点的表示，固名称不可带 ` / `
+
+* 修改 `SnowflakeId 108行`<br>
+  int dataCenterId = FlowWriteConfig.DATA_CENTER_ID_NUM;<br>
+  替换为你的数据中心地址，任务与任务之间分离，例如任务1 此值为1；任务2 此值为2
+
+* 修改 `ZookeeperUtils 74行`<br>
+   zookeeper = new ZooKeeper(FlowWriteConfig.ZOOKEEPER_SERVERS, SESSION_TIME_OUT, this);<br>
+  FlowWriteConfig.ZOOKEEPER_SERVERS 替换为你的zookeeper地址
+
